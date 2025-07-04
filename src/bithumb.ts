@@ -1004,6 +1004,6 @@ export class Bithumb {
         const kstOffset = 9 * 60; // 540
         const kstDate = new Date(date.getTime() + kstOffset * 60 * 1000);
 
-        return kstDate.toISOString();
+        return kstDate.toISOString().split('.')[0];
     }
 }
