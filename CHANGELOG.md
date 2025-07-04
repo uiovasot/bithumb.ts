@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/uiovasot/bithumb.ts/compare/v1.0.1...v1.0.2) (2025-07-04)
+
+
+### Bug Fixes
+
+* 주문 파라미터 타입을 OrderV2Params에서 OrderParams로 변경 및 불필요한 필드 제거 ([2ee36d9](https://github.com/uiovasot/bithumb.ts/commit/2ee36d93847d67efed7aeb1ffd1b40e48530ca80))
+
 ## [1.0.1](https://github.com/uiovasot/bithumb.ts/compare/v1.0.0...v1.0.1) (2025-07-04)
 
 
