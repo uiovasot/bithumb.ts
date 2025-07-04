@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/uiovasot/bithumb.ts/compare/v1.0.3...v1.1.0) (2025-07-04)
+
+
+### Features
+
+* 요청 속도 제한 기능 추가 ([4be86c0](https://github.com/uiovasot/bithumb.ts/commit/4be86c0e7ef451c8c2971e26584118e3a58f2458))
+
 ## [1.0.3](https://github.com/uiovasot/bithumb.ts/compare/v1.0.2...v1.0.3) (2025-07-04)
 
 
