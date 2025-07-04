@@ -57,11 +57,15 @@ import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { BithumbApiError, BithumbApiKeyError } from './error.js';
 import crypto from 'crypto';
+import { RateLimiter } from './rate-limiter';
 
 export class Bithumb {
     static readonly API_VERSION = 'v2.1.5';
 
     private options?: BithumbOptions;
+
+    private publicRateLimiter = new RateLimiter(150 - 20, 1000);
+    private privateRateLimiter = new RateLimiter(140 - 20, 1000);
 
     constructor(options?: BithumbOptions) {
         if (options) {
@@ -70,11 +74,10 @@ export class Bithumb {
     }
 
     public async getAllMarkets(isDetails: boolean = true): Promise<Market<typeof isDetails>[]> {
-        const response = await fetch(
-            `https://api.bithumb.com/v1/market/all?isDetails=${isDetails ? 'true' : 'false'}`,
-            {
+        const response = await this.publicRateLimiter.schedule(() =>
+            fetch(`https://api.bithumb.com/v1/market/all?isDetails=${isDetails ? 'true' : 'false'}`, {
                 headers: { accept: 'application/json' },
-            }
+            })
         );
 
         const data: Market<typeof isDetails>[] | ApiError = await response.json();
@@ -99,9 +102,11 @@ export class Bithumb {
             url.searchParams.append('count', count.toString());
         }
 
-        const response = await fetch(url.toString(), {
-            headers: { accept: 'application/json' },
-        });
+        const response = await this.publicRateLimiter.schedule(() =>
+            fetch(url.toString(), {
+                headers: { accept: 'application/json' },
+            })
+        );
 
         const data: MinuteCandle[] | ApiError = await response.json();
 
@@ -129,9 +134,11 @@ export class Bithumb {
             url.searchParams.append('convertingPriceUnit', convertingPriceUnit);
         }
 
-        const response = await fetch(url.toString(), {
-            headers: { accept: 'application/json' },
-        });
+        const response = await this.publicRateLimiter.schedule(() =>
+            fetch(url.toString(), {
+                headers: { accept: 'application/json' },
+            })
+        );
 
         const data: DayCandle[] | ApiError = await response.json();
 
@@ -155,9 +162,11 @@ export class Bithumb {
             url.searchParams.append('count', count.toString());
         }
 
-        const response = await fetch(url.toString(), {
-            headers: { accept: 'application/json' },
-        });
+        const response = await this.publicRateLimiter.schedule(() =>
+            fetch(url.toString(), {
+                headers: { accept: 'application/json' },
+            })
+        );
 
         const data: WeekMonthCandle[] | ApiError = await response.json();
 
@@ -181,9 +190,11 @@ export class Bithumb {
             url.searchParams.append('count', count.toString());
         }
 
-        const response = await fetch(url.toString(), {
-            headers: { accept: 'application/json' },
-        });
+        const response = await this.publicRateLimiter.schedule(() =>
+            fetch(url.toString(), {
+                headers: { accept: 'application/json' },
+            })
+        );
 
         const data: WeekMonthCandle[] | ApiError = await response.json();
 
@@ -215,9 +226,11 @@ export class Bithumb {
             url.searchParams.append('daysAgo', daysAgo.toString());
         }
 
-        const response = await fetch(url.toString(), {
-            headers: { accept: 'application/json' },
-        });
+        const response = await this.publicRateLimiter.schedule(() =>
+            fetch(url.toString(), {
+                headers: { accept: 'application/json' },
+            })
+        );
 
         const data: TradeTick[] | ApiError = await response.json();
 
@@ -233,9 +246,11 @@ export class Bithumb {
 
         url.searchParams.append('markets', markets.join(','));
 
-        const response = await fetch(url.toString(), {
-            headers: { accept: 'application/json' },
-        });
+        const response = await this.publicRateLimiter.schedule(() =>
+            fetch(url.toString(), {
+                headers: { accept: 'application/json' },
+            })
+        );
 
         const data: Ticker[] | ApiError = await response.json();
 
@@ -251,9 +266,11 @@ export class Bithumb {
 
         url.searchParams.append('markets', markets.join(','));
 
-        const response = await fetch(url.toString(), {
-            headers: { accept: 'application/json' },
-        });
+        const response = await this.publicRateLimiter.schedule(() =>
+            fetch(url.toString(), {
+                headers: { accept: 'application/json' },
+            })
+        );
 
         const data: OrderBook[] | ApiError = await response.json();
 
@@ -265,9 +282,11 @@ export class Bithumb {
     }
 
     public async getVirtualAssetWarning(): Promise<VirtualAssetWarning> {
-        const response = await fetch(`https://api.bithumb.com/v1/market/virtual_asset_warning`, {
-            headers: { accept: 'application/json' },
-        });
+        const response = await this.publicRateLimiter.schedule(() =>
+            fetch(`https://api.bithumb.com/v1/market/virtual_asset_warning`, {
+                headers: { accept: 'application/json' },
+            })
+        );
 
         const data: VirtualAssetWarning | ApiError = await response.json();
 
@@ -291,12 +310,14 @@ export class Bithumb {
 
         const token = jwt.sign(payload, this.options.secretKey);
 
-        const response = await fetch(`https://api.bithumb.com/v1/accounts`, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(`https://api.bithumb.com/v1/accounts`, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: Account[] | ApiError = await response.json();
 
@@ -318,12 +339,14 @@ export class Bithumb {
 
         const token = this.getToken(url.searchParams);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: OrderChance | ApiError = await response.json();
 
@@ -345,12 +368,14 @@ export class Bithumb {
 
         const token = this.getToken(url.searchParams);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: SingleOrder | ApiError = await response.json();
 
@@ -382,12 +407,14 @@ export class Bithumb {
 
         const token = this.getToken(url.searchParams);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: Order[] | ApiError = await response.json();
 
@@ -415,14 +442,16 @@ export class Bithumb {
 
         const token = this.getToken(searchParams);
 
-        const response = await fetch(url, {
-            method: 'POST',
-            body: searchParams.toString(),
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                method: 'POST',
+                body: searchParams.toString(),
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: OrderV2 | ApiError = await response.json();
 
@@ -446,14 +475,16 @@ export class Bithumb {
 
         const token = this.getToken(searchParams);
 
-        const response = await fetch(url, {
-            method: 'DELETE',
-            body: searchParams.toString(),
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                method: 'DELETE',
+                body: searchParams.toString(),
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: CancelOrder | ApiError = await response.json();
 
@@ -485,12 +516,14 @@ export class Bithumb {
 
         const token = this.getToken(url.searchParams);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: Withdraw[] | ApiError = await response.json();
 
@@ -521,12 +554,14 @@ export class Bithumb {
 
         const token = this.getToken(url.searchParams);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: WthdrawKrw[] | ApiError = await response.json();
 
@@ -550,12 +585,14 @@ export class Bithumb {
 
         const token = this.getToken(url.searchParams);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: SingleWithdraw | ApiError = await response.json();
 
@@ -578,12 +615,14 @@ export class Bithumb {
 
         const token = this.getToken(url.searchParams);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: WithdrawChance | ApiError = await response.json();
 
@@ -616,14 +655,16 @@ export class Bithumb {
 
         const token = this.getToken(searchParams);
 
-        const response = await fetch(url, {
-            method: 'POST',
-            body: searchParams.toString(),
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                method: 'POST',
+                body: searchParams.toString(),
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: WithdrawCoin | ApiError = await response.json();
 
@@ -648,14 +689,16 @@ export class Bithumb {
 
         const token = this.getToken(searchParams);
 
-        const response = await fetch(url, {
-            method: 'POST',
-            body: searchParams.toString(),
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                method: 'POST',
+                body: searchParams.toString(),
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: WithdrawKrw | ApiError = await response.json();
 
@@ -679,12 +722,14 @@ export class Bithumb {
 
         const token = jwt.sign(payload, this.options.secretKey);
 
-        const response = await fetch(`https://api.bithumb.com/v1/withdraws/coin_addresses`, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(`https://api.bithumb.com/v1/withdraws/coin_addresses`, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: WithdrawAllow[] | ApiError = await response.json();
 
@@ -716,12 +761,14 @@ export class Bithumb {
 
         const token = this.getToken(url.searchParams);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: SingleDeposit[] | ApiError = await response.json();
 
@@ -752,12 +799,14 @@ export class Bithumb {
 
         const token = this.getToken(url.searchParams);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: SingleDepositKrw[] | ApiError = await response.json();
 
@@ -781,12 +830,14 @@ export class Bithumb {
 
         const token = this.getToken(url.searchParams);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: Deposit | ApiError = await response.json();
 
@@ -809,12 +860,14 @@ export class Bithumb {
 
         const token = this.getToken(url.searchParams);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: CoinAddress | ApiError = await response.json();
 
@@ -840,12 +893,14 @@ export class Bithumb {
 
         const token = jwt.sign(payload, this.options.secretKey);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: CoinAddress[] | ApiError = await response.json();
 
@@ -868,12 +923,14 @@ export class Bithumb {
 
         const token = this.getToken(url.searchParams);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: CoinAddress[] | ApiError = await response.json();
 
@@ -898,14 +955,16 @@ export class Bithumb {
 
         const token = this.getToken(searchParams);
 
-        const response = await fetch(url, {
-            method: 'POST',
-            body: searchParams.toString(),
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                method: 'POST',
+                body: searchParams.toString(),
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: DepositKrw | ApiError = await response.json();
 
@@ -931,12 +990,14 @@ export class Bithumb {
 
         const token = jwt.sign(payload, this.options.secretKey);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: WalletStatus[] | ApiError = await response.json();
 
@@ -962,12 +1023,14 @@ export class Bithumb {
 
         const token = jwt.sign(payload, this.options.secretKey);
 
-        const response = await fetch(url, {
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await this.privateRateLimiter.schedule(() =>
+            fetch(url, {
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+        );
 
         const data: ApiKey[] | ApiError = await response.json();
 
