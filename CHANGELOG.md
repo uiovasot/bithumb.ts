@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/uiovasot/bithumb.ts/compare/v1.0.2...v1.0.3) (2025-07-04)
+
+
+### Bug Fixes
+
+* toKSTISOString 메서드에서 ISO 문자열의 밀리초 부분 제거 ([1a479d4](https://github.com/uiovasot/bithumb.ts/commit/1a479d4e879c7e70d763dd5d8164a16f41f8642c))
+
 ## [1.0.2](https://github.com/uiovasot/bithumb.ts/compare/v1.0.1...v1.0.2) (2025-07-04)
 
 
