@@ -458,7 +458,7 @@ export interface Order {
     trades_count: number;
 }
 
-export interface OrderV2Params {
+export interface OrderParams {
     /** 마켓 ID */
     market: string;
     /** 주문 종류 (bid: 매수, ask: 매도) */
@@ -467,10 +467,6 @@ export interface OrderV2Params {
     order_type: 'limit' | 'price' | 'stop_limit' | 'stop_price';
     /** 주문 가격 */
     price: string;
-    /** 주문 상태 (wait: 대기, done: 완료, cancel: 취소) */
-    state: 'wait' | 'done' | 'cancel';
-    /** 주문 생성 시간 (ISO 8601 형식) */
-    created_at: string;
     /** 사용자가 입력한 주문 양 */
     volume: NumberString;
 }

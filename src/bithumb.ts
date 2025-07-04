@@ -22,7 +22,7 @@ import type {
     OrderChanceParams,
     OrderListParams,
     OrderV2,
-    OrderV2Params,
+    OrderParams,
     SingleDeposit,
     SingleDepositKrw,
     SingleDepositParams,
@@ -398,7 +398,7 @@ export class Bithumb {
         return data;
     }
 
-    public async order(params: OrderV2Params): Promise<OrderV2> {
+    public async order(params: OrderParams): Promise<OrderV2> {
         if (!this.options || !this.options.accessKey || !this.options.secretKey) {
             throw new BithumbApiKeyError();
         }
@@ -411,8 +411,6 @@ export class Bithumb {
         searchParams.append('side', params.side);
         searchParams.append('order_type', params.order_type);
         searchParams.append('price', params.price);
-        searchParams.append('state', params.state);
-        searchParams.append('created_at', params.created_at);
         searchParams.append('volume', params.volume);
 
         const token = this.getToken(searchParams);
