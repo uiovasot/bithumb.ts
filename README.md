@@ -31,7 +31,7 @@ const client = new Bithumb({
 });
 
 // Public API
-const ticker = await client.ticker({
+const ticker = await client.getTicker({
     markets: ['KRW-BTC'],
 });
 
@@ -40,8 +40,8 @@ const order = await client.order({
     market: 'KRW-BTC',
     side: 'bid',
     order_type: 'limit',
-    price: 84000000,
-    volume: 0.001,
+    price: '84000000',
+    volume: '0.001',
 });
 ```
 

@@ -1,3 +1,5 @@
+export type NumberString = `${number}`;
+
 export interface BithumbOptions {
     accessKey: string;
     secretKey: string;
@@ -258,9 +260,9 @@ export interface Account {
     /** 화폐를 의미하는 영문 대문자 코드 */
     currency: string;
     /** 주문가능 금액/수량 */
-    balance: string;
+    balance: NumberString;
     /** 주문 중 묶여있는 금액/수량 */
-    locked: string;
+    locked: NumberString;
     /** 매수평균가 */
     avg_buy_price: string;
     /** 매수평균가 수정 여부 */
@@ -275,13 +277,13 @@ export interface OrderChanceParams {
 
 export interface OrderChance {
     /** 매수 수수료 비율 */
-    bid_fee: string;
+    bid_fee: NumberString;
     /** 매도 수수료 비율 */
-    ask_fee: string;
+    ask_fee: NumberString;
     /** 마켓 매수 수수료 비율 */
-    maker_bid_fee: string;
+    maker_bid_fee: NumberString;
     /** 마켓 매도 수수료 비율 */
-    maker_ask_fee: string;
+    maker_ask_fee: NumberString;
     /** 마켓 정보 */
     market: {
         /** 마켓의 유일 키 */
@@ -301,21 +303,21 @@ export interface OrderChance {
             /** 화폐를 의미하는 영문 대문자 코드 */
             currency: string;
             /** 주문금액 단위 */
-            price_unit: string;
+            price_unit: NumberString;
             /** 최소 매도/매수 금액 */
-            min_total: string;
+            min_total: NumberString;
         };
         /** 매도 시 제약사항 */
         ask: {
             /** 화폐를 의미하는 영문 대문자 코드 */
             currency: string;
             /** 주문금액 단위 */
-            price_unit: string;
+            price_unit: NumberString;
             /** 최소 매도/매수 금액 */
-            min_total: string;
+            min_total: NumberString;
         };
         /** 최대 매도/매수 금액 */
-        max_total: string;
+        max_total: NumberString;
         /** 마켓 운영 상태 */
         state: string;
     };
@@ -324,9 +326,9 @@ export interface OrderChance {
         /** 화폐를 의미하는 영문 대문자 코드 */
         currency: string;
         /** 주문가능 금액/수량 */
-        balance: string;
+        balance: NumberString;
         /** 주문 중 묶여있는 금액/수량 */
-        locked: string;
+        locked: NumberString;
         /** 매수평균가 */
         avg_buy_price: string;
         /** 매수평균가 수정 여부 */
@@ -339,9 +341,9 @@ export interface OrderChance {
         /** 화폐를 의미하는 영문 대문자 코드 */
         currency: string;
         /** 주문가능 금액/수량 */
-        balance: string;
+        balance: NumberString;
         /** 주문 중 묶여있는 금액/수량 */
-        locked: string;
+        locked: NumberString;
         /** 매수평균가 */
         avg_buy_price: string;
         /** 매수평균가 수정 여부 */
@@ -372,19 +374,19 @@ export interface SingleOrder {
     /** 주문 생성 시간 (ISO 8601 형식) */
     created_at: string;
     /** 사용자가 입력한 주문 양 */
-    volume: string;
+    volume: NumberString;
     /** 체결 후 남은 주문 양 */
-    remaining_volume: string;
+    remaining_volume: NumberString;
     /** 수수료로 예약된 비용 */
-    reserved_fee: string;
+    reserved_fee: NumberString;
     /** 남은 수수료 */
-    remaining_fee: string;
+    remaining_fee: NumberString;
     /** 사용된 수수료 */
-    paid_fee: string;
+    paid_fee: NumberString;
     /** 거래에 사용중인 비용 */
-    locked: string;
+    locked: NumberString;
     /** 체결된 양 */
-    executed_volume: string;
+    executed_volume: NumberString;
     /** 해당 주문에 걸린 체결 수 */
     trades_count: number;
     /** 체결 정보 */
@@ -396,7 +398,7 @@ export interface SingleOrder {
         /** 체결 가격 */
         price: string;
         /** 체결 양 */
-        volume: string;
+        volume: NumberString;
         /** 체결된 총 가격 */
         funds: string;
         /** 체결 종류 (bid: 매수, ask: 매도) */
@@ -439,19 +441,19 @@ export interface Order {
     /** 주문 생성 시간 (ISO 8601 형식) */
     created_at: string;
     /** 사용자가 입력한 주문 양 */
-    volume: string;
+    volume: NumberString;
     /** 체결 후 남은 주문 양 */
-    remaining_volume: string;
+    remaining_volume: NumberString;
     /** 수수료로 예약된 비용 */
-    reserved_fee: string;
+    reserved_fee: NumberString;
     /** 남은 수수료 */
-    remaining_fee: string;
+    remaining_fee: NumberString;
     /** 사용된 수수료 */
-    paid_fee: string;
+    paid_fee: NumberString;
     /** 거래에 사용중인 비용 */
-    locked: string;
+    locked: NumberString;
     /** 체결된 양 */
-    executed_volume: string;
+    executed_volume: NumberString;
     /** 해당 주문에 걸린 체결 수 */
     trades_count: number;
 }
@@ -470,7 +472,7 @@ export interface OrderV2Params {
     /** 주문 생성 시간 (ISO 8601 형식) */
     created_at: string;
     /** 사용자가 입력한 주문 양 */
-    volume: string;
+    volume: NumberString;
 }
 
 export interface OrderV2 {
@@ -531,9 +533,9 @@ export interface Withdraw {
     /** 출금 완료 시간 (ISO 8601 형식) */
     done_at?: string;
     /** 출금 금액/수량 */
-    amount: string;
+    amount: NumberString;
     /** 출금 수수료 */
-    fee: string;
+    fee: NumberString;
     /** 출금 유형 (default: 일반출금) */
     transaction_type?: string;
 }
@@ -563,9 +565,9 @@ export interface WthdrawKrw {
     /** 출금 완료 시간 (ISO 8601 형식) */
     done_at?: string;
     /** 출금 금액/수량 */
-    amount: string;
+    amount: NumberString;
     /** 출금 수수료 */
-    fee: string;
+    fee: NumberString;
 }
 
 export interface SingleWithdrawParams {
@@ -593,9 +595,9 @@ export interface SingleWithdraw {
     /** 출금 완료 시간 (ISO 8601 형식) */
     done_at?: string;
     /** 출금 금액/수량 */
-    amount: string;
+    amount: NumberString;
     /** 출금 수수료 */
-    fee: string;
+    fee: NumberString;
     /** 출금 유형 (default: 일반출금) */
     transaction_type?: string;
 }
@@ -632,7 +634,7 @@ export interface WithdrawChance {
         /** 화폐를 의미하는 영문 대문자 코드 */
         code: string;
         /** 해당 화폐의 출금 수수료 */
-        withdraw_fee: string;
+        withdraw_fee: NumberString;
         /** 화폐의 디지털 자산 여부 */
         is_coin: boolean;
         /** 해당 화폐의 지갑 상태 */
@@ -645,9 +647,9 @@ export interface WithdrawChance {
         /** 화폐를 의미하는 영문 대문자 코드 */
         currency: string;
         /** 주문가능 금액/수량 */
-        balance: string;
+        balance: NumberString;
         /** 주문 중 묶여있는 금액/수량 */
-        locked: string;
+        locked: NumberString;
         /** 평균매수가 */
         avg_buy_price: string;
         /** 평균매수가 수정 여부 */
@@ -682,7 +684,7 @@ export interface WithdrawCoinParams {
     /** 출금 네트워크 */
     net_type: string;
     /** 출금 수량 */
-    amount: number;
+    amount: NumberString;
     /** 출금 주소 */
     address: string;
     /** 2차 출금 주소 (필요한 디지털 자산에 한해서) */
@@ -717,9 +719,9 @@ export interface WithdrawCoin {
     /** 출금 완료 시간 (ISO 8601 형식) */
     done_at?: string;
     /** 출금 금액/수량 */
-    amount: string;
+    amount: NumberString;
     /** 출금 수수료 */
-    fee: string;
+    fee: NumberString;
     /** 원화 환산 가격 */
     krw_amount?: string;
     /** 출금 유형 (default: 일반출금) */
@@ -728,7 +730,7 @@ export interface WithdrawCoin {
 
 export interface WithdrawKrwParams {
     /** 출금액 */
-    amount: string;
+    amount: NumberString;
     /** 2차 인증 수단 (kakao: 카카오 인증) */
     two_factor_type: 'kakao';
 }
@@ -743,9 +745,9 @@ export interface WithdrawKrw {
     /** 출금 완료 시간 (ISO 8601 형식) */
     done_at?: string;
     /** 출금 금액/수량 */
-    amount: string;
+    amount: NumberString;
     /** 출금 수수료 */
-    fee: string;
+    fee: NumberString;
 }
 
 export interface WithdrawAllow {
@@ -836,9 +838,9 @@ export interface SingleDeposit {
     /** 입금 완료 시간 (ISO 8601 형식) */
     done_at?: string;
     /** 입금 수량 */
-    amount: string;
+    amount: NumberString;
     /** 입금 수수료 */
-    fee: string;
+    fee: NumberString;
     /** 입금 유형 (default: 일반입금) */
     transaction_type?: string;
 }
@@ -868,9 +870,9 @@ export interface SingleDepositKrw {
     /** 입금 완료 시간 (ISO 8601 형식) */
     done_at?: string;
     /** 입금 수량 */
-    amount: string;
+    amount: NumberString;
     /** 입금 수수료 */
-    fee: string;
+    fee: NumberString;
     /** 입금 유형 (default: 일반입금) */
     transaction_type?: string;
 }
@@ -915,9 +917,9 @@ export interface Deposit {
     /** 입금 완료 시간 (ISO 8601 형식) */
     done_at?: string;
     /** 입금 수량 */
-    amount: string;
+    amount: NumberString;
     /** 입금 수수료 */
-    fee: string;
+    fee: NumberString;
     /** 입금 유형 (default: 일반입금) */
     transaction_type?: string;
 }
@@ -949,7 +951,7 @@ export interface SingleDepositAddressParams {
 
 export interface DepositKrwParams {
     /** 입금액 */
-    amount: string;
+    amount: NumberString;
     /** 2차 인증 수단 (kakao: 카카오 인증) */
     two_factor_type: 'kakao';
 }
@@ -964,9 +966,9 @@ export interface DepositKrw {
     /** 입금 완료 시간 (ISO 8601 형식) */
     done_at?: string;
     /** 입금 금액/수량 */
-    amount: string;
+    amount: NumberString;
     /** 입금 수수료 */
-    fee: string;
+    fee: NumberString;
     /** 입금 유형 (default: 일반입금) */
     transaction_type?: string;
 }
