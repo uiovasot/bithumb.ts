@@ -58,11 +58,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { BithumbApiError, BithumbApiKeyError } from './error.js';
 import crypto from 'crypto';
 import { RateLimiter } from './rate-limiter';
+import { BithumbWS } from './websocket';
 
 export class Bithumb {
     static readonly API_VERSION = 'v2.1.5';
 
     private options?: BithumbOptions;
+
+    public ws = new BithumbWS(this.options);
 
     private publicRateLimiter = new RateLimiter(150 - 20, 1000);
     private privateRateLimiter = new RateLimiter(140 - 20, 1000);

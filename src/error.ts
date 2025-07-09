@@ -22,3 +22,10 @@ export class BithumbApiKeyError extends Error {
         this.name = 'BithumbApiKeyError';
     }
 }
+
+export class BithumbWSNotConnectedError extends Error {
+    constructor() {
+        super('WebSocket is not connected');
+        this.name = 'BithumbWSNotConnectedError';
+    }
+}

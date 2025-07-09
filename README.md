@@ -8,7 +8,8 @@
 -   💰 입출금
 -   🔐 PRIVATE 요청(accessKey, secretKey) 지원
 -   ✅ TypeScript를 사용한 유형 안전 응답
--   🌐 REST API 지원 (WebSocket 지원 예정)
+-   🌐 REST API 지원
+-   🍃 WebSocket 지원
 
 ## 설치
 
@@ -49,11 +50,11 @@ const order = await client.order({
 
 ### Public
 
--   [x] WebSocket를 제외한 전체
+-   [x] 전체
 
 ### Private
 
--   [x] WebSocket를 제외한 전체
+-   [x] 전체
 
 > 전체 API 적용 범위 및 자세한 내용은 [Bithumb 공식 API 문서](https://apidocs.bithumb.com/)를 참조하세요.
 
