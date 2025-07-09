@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/uiovasot/bithumb.ts/compare/v1.1.0...v1.2.0) (2025-07-09)
+
+
+### Features
+
+* WebSocket 지원(beta) ([3f8435a](https://github.com/uiovasot/bithumb.ts/commit/3f8435a7ea69e22307cf6895d97b32b0dfcf13e6))
+
 # [1.1.0](https://github.com/uiovasot/bithumb.ts/compare/v1.0.3...v1.1.0) (2025-07-04)
 
 
