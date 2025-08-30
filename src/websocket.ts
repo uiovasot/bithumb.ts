@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
-import { BithumbApiKeyError, BithumbWSNotConnectedError } from './error';
+import { BithumbApiKeyError, BithumbWSNotConnectedError } from './error.js';
 import { BithumbOptions } from './types';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';

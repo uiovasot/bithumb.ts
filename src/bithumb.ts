@@ -57,8 +57,8 @@ import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { BithumbApiError, BithumbApiKeyError } from './error.js';
 import crypto from 'crypto';
-import { RateLimiter } from './rate-limiter';
-import { BithumbWS } from './websocket';
+import { RateLimiter } from './rate-limiter.js';
+import { BithumbWS } from './websocket.js';
 
 export class Bithumb {
     static readonly API_VERSION = 'v2.1.5';
