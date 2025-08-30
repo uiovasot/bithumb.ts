@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/uiovasot/bithumb.ts/compare/v1.2.0...v1.2.1) (2025-08-30)
+
+
+### Bug Fixes
+
+* [#1](https://github.com/uiovasot/bithumb.ts/issues/1) - add .js extension to import ([9092a50](https://github.com/uiovasot/bithumb.ts/commit/9092a5065a75af50a956cbeeae49e2afb0f72b91))
+
 # [1.2.0](https://github.com/uiovasot/bithumb.ts/compare/v1.1.0...v1.2.0) (2025-07-09)
 
 
